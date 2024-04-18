@@ -5,6 +5,8 @@ let saveNoteBtn;
 let newNoteBtn;
 let noteList;
 
+//Element Selection
+//This "if" statment selects various HTML elements from the DOM based on their classes, presumably for interacting with them later.
 if (window.location.pathname === '/notes') {
   noteForm = document.querySelector('.note-form');
   noteTitle = document.querySelector('.note-title');
@@ -14,20 +16,25 @@ if (window.location.pathname === '/notes') {
   clearBtn = document.querySelector('.clear-btn');
   noteList = document.querySelectorAll('.list-container .list-group');
 }
-
+//Functions for Showing and Hiding Elements
+//Here defines show and hide functions to control the display of HTML elements by modifying their style.display property.
 // Show an element
 const show = (elem) => {
   elem.style.display = 'inline';
 };
 
-// Hide an element
+//Hide an element
 const hide = (elem) => {
   elem.style.display = 'none';
 };
 
-// activeNote is used to keep track of the note in the textarea
+//HTTP Requests
+//Below "const" variables define functions for making HTTP requests to interact with a backend API
+
+//activeNote is used to keep track of the note in the textarea
 let activeNote = {};
 
+//getNotes - Sends a GET request to retrieve notes from the server.
 const getNotes = () =>
   fetch('/api/notes', {
     method: 'GET',
@@ -36,6 +43,7 @@ const getNotes = () =>
     }
   });
 
+//saveNote - Sends a POST request to save a new note to the server.
 const saveNote = (note) =>
   fetch('/api/notes', {
     method: 'POST',
@@ -45,6 +53,7 @@ const saveNote = (note) =>
     body: JSON.stringify(note)
   });
 
+//deleteNote - Sends a DELETE request to delete a note from the server.
 const deleteNote = (id) =>
   fetch(`/api/notes/${id}`, {
     method: 'DELETE',
@@ -53,10 +62,13 @@ const deleteNote = (id) =>
     }
   });
 
+//Rendering Active Note
+//It defines a function renderActiveNote to display the active note in the UI.
 const renderActiveNote = () => {
   hide(saveNoteBtn);
   hide(clearBtn);
 
+//Depending on whether there is an active note(activeNote), it shows or hides certain buttons and sets the values of input fields accordingly.
   if (activeNote.id) {
     show(newNoteBtn);
     noteTitle.setAttribute('readonly', true);
@@ -72,6 +84,10 @@ const renderActiveNote = () => {
   }
 };
 
+//Event Handlers
+//It defines event handler functions for various user interactions
+
+//handleNoteSave - Handles the click event on the save note button, saving the note and updating the UI.
 const handleNoteSave = () => {
   const newNote = {
     title: noteTitle.value,
@@ -83,9 +99,9 @@ const handleNoteSave = () => {
   });
 };
 
-// Delete the clicked note
+//handleNoteDelete - Handles the click event on the delete note button, deleting the note and updating the UI.
 const handleNoteDelete = (e) => {
-  // Prevents the click listener for the list from being called when the button inside of it is clicked
+//Prevents the click listener for the list from being called when the button inside of it is clicked
   e.stopPropagation();
 
   const note = e.target;
@@ -94,28 +110,28 @@ const handleNoteDelete = (e) => {
   if (activeNote.id === noteId) {
     activeNote = {};
   }
-
+//Deletes the clicked note
   deleteNote(noteId).then(() => {
     getAndRenderNotes();
     renderActiveNote();
   });
 };
 
-// Sets the activeNote and displays it
+//handleNoteView - Handles the click event on a note title, displaying the note in the UI.
 const handleNoteView = (e) => {
   e.preventDefault();
   activeNote = JSON.parse(e.target.parentElement.getAttribute('data-note'));
   renderActiveNote();
 };
 
-// Sets the activeNote to and empty object and allows the user to enter a new note
+//handleNewNoteView - Handles the click event on the new note button, allowing the user to enter a new note.
 const handleNewNoteView = (e) => {
   activeNote = {};
   show(clearBtn);
   renderActiveNote();
 };
 
-// Renders the appropriate buttons based on the state of the form
+//handleRenderBtns - Renders appropriate buttons based on the state of the form.
 const handleRenderBtns = () => {
   show(clearBtn);
   if (!noteTitle.value.trim() && !noteText.value.trim()) {
@@ -127,8 +143,10 @@ const handleRenderBtns = () => {
   }
 };
 
-// Render the list of note titles
+//Rendering Note List
+//This defines a function renderNoteList to render the list of note titles in the UI.
 const renderNoteList = async (notes) => {
+  //Here it fetches notes from the server, converts the response to JSON, and creates HTML elements to represent each note.
   let jsonNotes = await notes.json();
   if (window.location.pathname === '/notes') {
     noteList.forEach((el) => (el.innerHTML = ''));
@@ -136,7 +154,7 @@ const renderNoteList = async (notes) => {
 
   let noteListItems = [];
 
-  // Returns HTML element with or without a delete button
+//Returns HTML element with or without a delete button
   const createLi = (text, delBtn = true) => {
     const liEl = document.createElement('li');
     liEl.classList.add('list-group-item');
@@ -176,19 +194,28 @@ const renderNoteList = async (notes) => {
     noteListItems.push(li);
   });
 
+//Depending on the current URL path, it appends the note elements to the appropriate container in the UI.
   if (window.location.pathname === '/notes') {
     noteListItems.forEach((note) => noteList[0].append(note));
   }
 };
 
-// Gets notes from the db and renders them to the sidebar
+//Gets notes from the db and renders them to the sidebar
 const getAndRenderNotes = () => getNotes().then(renderNoteList);
 
+// Event Listeners
+// It adds event listeners to various elements to handle user interactions
 if (window.location.pathname === '/notes') {
+//Click event on the save note button triggers handleNoteSave.
   saveNoteBtn.addEventListener('click', handleNoteSave);
+//Click event on the new note button triggers handleNewNoteView.
   newNoteBtn.addEventListener('click', handleNewNoteView);
+//Click event on the clear button triggers renderActiveNote.
   clearBtn.addEventListener('click', renderActiveNote);
+//Input event on the note form triggers handleRenderBtns.
   noteForm.addEventListener('input', handleRenderBtns);
 }
 
+// Initial Rendering
+// It calls getAndRenderNotes to fetch and render notes from the server when the page is loaded.
 getAndRenderNotes();

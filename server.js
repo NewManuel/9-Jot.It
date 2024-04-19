@@ -18,6 +18,7 @@ app.get("/notes", (req, res) => res.sendFile(path.join(__dirname, "/public/notes
 app.listen(PORT, () => console.log("Now listening"));
 
 
+// Descriptions:
 
 // Importing Required Packages:
 // It imports the necessary packages: path, express, fs, and a custom module api from "./routes/index.js".

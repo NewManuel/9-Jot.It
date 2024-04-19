@@ -37,25 +37,19 @@ THEN I am presented with empty fields to enter a new note title and the note’s
 
 * ChatGPT
 
-### Gif
+### <ins>Gif</ins>
 
 The following GIF shows the web application's appearance and functionality:
 
 ![Existing notes are listed in the left-hand column with empty fields on the right-hand side for the new note’s title and text.](./Images/11-express-homework-demo.gif)
 
 
-## Bonus
+### <ins>License</ins>
 
-You haven’t learned how to handle DELETE requests, but this application offers that functionality on the front end. As a bonus, try to add the DELETE route to the application using the following guideline:
 
-* `DELETE /api/notes/:id` should receive a query parameter that contains the id of a note to delete. To delete a note, you'll need to read all notes from the `db.json` file, remove the note with the given `id` property, and then rewrite the notes to the `db.json` file.
-
-### License
-
-```
 MIT License
 
-Copyright (c) 2024 sourylime
+**Copyright &copy; 2024 NewManuel**
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -74,12 +68,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-```
 
-### Url
 
-* The URL of the GitHub repository: >Text
+### <ins>Url</ins>
 
-* The URL of the functional, deployed application.
+* The URL of the GitHub repository: https://github.com/NewManuel/9-Jot.It
 
-* The URL of the GitHub repository, with a unique name and a README describing the project.
+* The URL of the functional, Heroku deployed application: 
